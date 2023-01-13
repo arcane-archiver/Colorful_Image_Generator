@@ -8,15 +8,14 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-  if (argc == 2) {
+  if (argc == 1+1) {
     unsigned int width = (unsigned int)atoi(argv[1]);
     std::cout << "Calling myArt(" << width << ", " << width << ") and saving it as `art.png`." << std::endl;
 
     cs225::PNG png = myArt(width, width);
     png.writeToFile("art.png");
   } else {
-    std::cout << "Rotating `in.png` as `out.png`" << std::endl;
-    rotate("in.png", "out.png");
+    std::cout << "Need an integer argument." << std::endl;
   }
   
   return 0;

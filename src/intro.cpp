@@ -68,7 +68,7 @@ class ArtHelper {
   {
     SCALE = (double)smallestLength / 800.0;
 
-    unsigned int borderSpace = static_cast<unsigned int>(200 * SCALE);
+    unsigned int borderSpace = 200 * SCALE;
     BOUNDARY_CORNER_MIN = borderSpace;
     BOUNDARY_CORNER_MAX = smallestLength - borderSpace;
 
@@ -141,42 +141,34 @@ class ArtHelper {
     if (d == Direction::N) {
       for (unsigned i = 0; i < lineLength; i++) {
         y += 1;
-        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), static_cast<unsigned int>(x), static_cast<unsigned int>(y));
+        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), x, y);
       }
     } else if (d == Direction::S) {
       for (unsigned i = 0; i < lineLength; i++) {
         y -= 1;
-        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), static_cast<unsigned int>(x), static_cast<unsigned int>(y));
+        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), x, y);
       }
     } else if (d == Direction::E) {
       for (unsigned i = 0; i < lineLength; i++) {
         x += 1;
-        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), static_cast<unsigned int>(x), static_cast<unsigned int>(y));
+        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), x, y);
       }
     } else /* West */ {
       for (unsigned i = 0; i < lineLength; i++) {
         x -= 1;
-        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), static_cast<unsigned int>(x), static_cast<unsigned int>(y));
+        paint(png, cs225::HSLAPixel(EDGE_COLOR, 1.0, 0.5), x, y);
       }
     }
   }
 
   Position drawSquare(cs225::PNG & png, Direction d, double x, double y) {
-    for (
-      unsigned x_idx = static_cast<unsigned>(x - std::floor(SQUARE_WIDTH / 2));
-      x_idx <= x + std::floor(SQUARE_WIDTH / 2);
-      x_idx++
-    ) {
-      for (
-        unsigned y_idx = static_cast<unsigned>(y - std::floor(SQUARE_WIDTH / 2));
-        y_idx <= y + std::floor(SQUARE_WIDTH / 2);
-        y_idx++
-      ) {
+    for (unsigned x_idx = x - std::floor(SQUARE_WIDTH / 2); x_idx <= x + std::floor(SQUARE_WIDTH / 2); x_idx++) {
+      for (unsigned y_idx = y - std::floor(SQUARE_WIDTH / 2); y_idx <= y + std::floor(SQUARE_WIDTH / 2); y_idx++) {
         paint(png, cs225::HSLAPixel(NODE_COLOR, 1.0, 0.5), x_idx, y_idx);
       }
     }
 
-    return Position(d, static_cast<unsigned int>(x), static_cast<unsigned int>(y));
+    return Position(d, x, y);
   }
 
   Position drawCircle(
@@ -185,24 +177,24 @@ class ArtHelper {
   ) {
     using std::sqrt;
     using std::pow;
-    signed int y1 = static_cast<signed int>(k);
-    signed int y2 = static_cast<signed int>(k);
-    for (signed x = static_cast<signed>(h - radius); x <= h + radius; x++) {
-      y1 = static_cast<signed int>(sqrt(pow(radius, 2) - pow(x - h, 2)) + k);
-      y2 = 0 - static_cast<signed int>(sqrt(pow(radius, 2) - pow(x - h, 2)) + k);
+    signed int y1 = k;
+    signed int y2 = k;
+    for (signed x = h - radius; x <= h + radius; x++) {
+      y1 = sqrt(pow(radius, 2) - pow(x - h, 2)) + k;
+      y2 = 0 - sqrt(pow(radius, 2) - pow(x - h, 2)) + k;
       for (signed row = y1; row >= y2; row--) {
         double hue = pixel.h;
         try {
-          hue = safePixel(png, static_cast<unsigned int>(x), static_cast<unsigned int>(row)).h;
+          hue = safePixel(png, x, row).h;
         } catch (std::logic_error e) {
           break;
         }
-        if (hue == NODE_COLOR) {paint(png, pixel, static_cast<unsigned int>(x), static_cast<unsigned int>(row));}
+        if (hue == NODE_COLOR) {paint(png, pixel, x, row);}
         else if (hue == EDGE_COLOR) {continue;}
-        else {paint(png, cs225::HSLAPixel(pixel.h, pixel.s, pixel.l + 0.1), static_cast<unsigned int>(x), static_cast<unsigned int>(row));}
+        else {paint(png, cs225::HSLAPixel(pixel.h, pixel.s, pixel.l + 0.1), x, row);}
       }
     }
-    return Position(d, static_cast<unsigned>(h), static_cast<unsigned>(k));
+    return Position(d, h, k);
   }
 
   Position drawNode(
@@ -211,16 +203,16 @@ class ArtHelper {
   ) {
     using std::sqrt;
     using std::pow;
-    signed int y1 = static_cast<signed>(k);
-    signed int y2 = static_cast<signed>(k);
-    for (signed x = static_cast<signed>(h - radius); x <= h + radius; x++) {
-      y1 = static_cast<signed>(sqrt(pow(radius, 2) - pow(x - h, 2)) + k);
-      y2 = 0 - static_cast<signed>(sqrt(pow(radius, 2) - pow(x - h, 2)) + k);
+    signed int y1 = k;
+    signed int y2 = k;
+    for (signed x = h - radius; x <= h + radius; x++) {
+      y1 = sqrt(pow(radius, 2) - pow(x - h, 2)) + k;
+      y2 = 0 - sqrt(pow(radius, 2) - pow(x - h, 2)) + k;
       for (signed row = y1; row >= y2; row--) {
-        paint(png, pixel, static_cast<unsigned>(x), static_cast<unsigned>(row));
+        paint(png, pixel, x, row);
       }
     }
-    return Position(d, static_cast<unsigned>(h), static_cast<unsigned>(k));
+    return Position(d, h, k);
   }
 
   void drawParabola(cs225::PNG & png, cs225::HSLAPixel pixel, double a, double k, double h) {
@@ -228,7 +220,7 @@ class ArtHelper {
     double y = h;
     for (double x = 0; x < (signed)png.width(); x++) {
       y = a * pow(x - k, 2) + h;
-      paint(png, pixel, static_cast<unsigned>(x), static_cast<unsigned>(y));
+      paint(png, pixel, x, y);
     }
   }
 
@@ -240,16 +232,16 @@ class ArtHelper {
     for (signed x = 0; x < (signed int)png.width(); x++) {
       double y1 = a1 * pow(x - k1, 2) + h1;
       double y2 = a2 * pow(x - k2, 2) + h2;
-      for (signed row = static_cast<signed>(y1); row >= y2; row--) {
+      for (signed row = y1; row >= y2; row--) {
         double hue = pixel.h;
         try {
-          hue = safePixel(png, static_cast<unsigned>(x), static_cast<unsigned>(row)).h;
+          hue = safePixel(png, x, row).h;
         } catch (std::logic_error) {
           break;
         }
-        if (hue == NODE_COLOR) {paint(png, pixel, static_cast<unsigned>(x), static_cast<unsigned>(row));}
+        if (hue == NODE_COLOR) {paint(png, pixel, x, row);}
         else if (hue == EDGE_COLOR) {continue;}
-        else {paint(png, cs225::HSLAPixel(pixel.h, pixel.s, pixel.l + 0.1), static_cast<unsigned>(x), static_cast<unsigned>(row));}
+        else {paint(png, cs225::HSLAPixel(pixel.h, pixel.s, pixel.l + 0.1), x, row);}
       }
     }
   }
@@ -261,16 +253,16 @@ class ArtHelper {
     for (double x = 0; x < (double)png.width(); x++) {
       for (double y = 0; y < (double)png.height(); y++) {
         const double distance = std::sqrt(std::pow(x - centerX, 2) + std::pow(y - centerY, 2)); // distance in pixels
-        cs225::HSLAPixel pixel = safePixel(png, static_cast<unsigned>(x), static_cast<unsigned>(y));
+        cs225::HSLAPixel pixel = safePixel(png, x, y);
         if (pixel.h == NODE_COLOR) {
           colorIndex = pixel.h;
           iterateColorIndex(colorIndex, 0 - (unitOfColor * distance));
           // iterateColorIndex(colorIndex, unitOfColor * distance);
-          paint(png, cs225::HSLAPixel(colorIndex, 1.0, 0.35), static_cast<unsigned>(x), static_cast<unsigned>(y));
+          paint(png, cs225::HSLAPixel(colorIndex, 1.0, 0.35), x, y);
         } else if (pixel.h != NICE_COLOR) {
           colorIndex = pixel.h;
           iterateColorIndex(colorIndex, unitOfColor * distance);
-          paint(png, cs225::HSLAPixel(colorIndex, 1.0, 0.35), static_cast<unsigned>(x), static_cast<unsigned>(y));
+          paint(png, cs225::HSLAPixel(colorIndex, 1.0, 0.35), x, y);
         }
       }
     }
@@ -302,38 +294,38 @@ class ArtHelper {
 
   void drawBranch(cs225::PNG & png, Direction d, unsigned int x, unsigned int y) {
     Position pos = Position(d, x, y);
-    unsigned int northY = y + static_cast<unsigned>(std::floor(SQUARE_WIDTH / 2.0));
-    unsigned int southY = y - static_cast<unsigned>(std::floor(SQUARE_WIDTH / 2.0)); 
-    unsigned int eastX = x + static_cast<unsigned>(std::floor(SQUARE_WIDTH / 2.0));
-    unsigned int westX = x - static_cast<unsigned>(std::floor(SQUARE_WIDTH / 2.0));
+    unsigned int northY = y + std::floor(SQUARE_WIDTH / 2.0);
+    unsigned int southY = y - std::floor(SQUARE_WIDTH / 2.0); 
+    unsigned int eastX = x + std::floor(SQUARE_WIDTH / 2.0);
+    unsigned int westX = x - std::floor(SQUARE_WIDTH / 2.0);
     switch (d) {
       case Direction::N:
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::N, x, northY);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::N, x, northY);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::E, eastX, y);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::E, eastX, y);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::W, westX, y);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::W, westX, y);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y); break;
       case Direction::S:
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::S, x, southY);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::S, x, southY);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::E, eastX, y);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::E, eastX, y);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::W, westX, y);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::W, westX, y);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y); break;
       case Direction::E:
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::E, eastX, y);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::E, eastX, y);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::N, x, northY);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::N, x, northY);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::S, x, southY);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::S, x, southY);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y); break;
       case Direction::W:
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::W, westX, y);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::W, westX, y);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::N, x, northY);
+        pos = drawEdge(png, EDGE_LENGTH, Direction::N, x, northY);
         recursivelyDraw(png, false, pos.d, pos.x, pos.y);
-        pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), Direction::S, x, southY); 
+        pos = drawEdge(png, EDGE_LENGTH, Direction::S, x, southY); 
         recursivelyDraw(png, false, pos.d, pos.x, pos.y); break;
       case Direction::STOP: throw std::logic_error("in branch, Direction::STOP");
     }
@@ -353,7 +345,7 @@ class ArtHelper {
       recursivelyDraw(png, true, pos.d, pos.x, pos.y);
     } else {
       randNum = std::rand() % 10;
-      unsigned int edgeLength = static_cast<unsigned>(EDGE_LENGTH);
+      unsigned int edgeLength = EDGE_LENGTH;
       if (randNum < 4) {edgeLength *= 3;} else if (randNum < 6) {edgeLength *= 9;}
       randNum = std::rand() % 4;
       switch(randNum) {
@@ -400,8 +392,8 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
   cs225::PNG png(width, height);
 
   std::srand(823784745); // set seed
-  const unsigned int MIDDLE_X = static_cast<unsigned>(std::ceil(width / 2.0));
-  const unsigned int MIDDLE_Y = static_cast<unsigned>(std::ceil(height / 2.0));
+  const unsigned int MIDDLE_X = std::ceil(width / 2.0);
+  const unsigned int MIDDLE_Y = std::ceil(height / 2.0);
   try {
     ArtHelper help(std::min(png.width(), png.height()));
     help.dump(png);
