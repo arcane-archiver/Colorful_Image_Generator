@@ -1,5 +1,6 @@
-# visual studio code configuration
+# other
 .vscode
+./art.png
 
 # Prerequisites
 *.d
