@@ -115,33 +115,25 @@ void ColorfulImageGenerator::drawBranch(cs225::PNG & png, CanvasUtility::Cardina
 
   switch (d) {
     case North:
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(North));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(East));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(West));
-      recursivelyDrawGraph(png, false, pos); break;
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(North)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(East)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(West)));
+      break;
     case South:
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(South));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(East));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(West));
-      recursivelyDrawGraph(png, false, pos); break;
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(South)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(East)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(West)));
+      break;
     case East:
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(East));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(North));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(South));
-      recursivelyDrawGraph(png, false, pos); break;
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(East)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(North)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(South)));
+      break;
     case West:
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(West));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(North));
-      recursivelyDrawGraph(png, false, pos);
-      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(South)); 
-      recursivelyDrawGraph(png, false, pos); break;
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(West)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(North)));
+      recursivelyDrawGraph(png, false, drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), getBranchPosition.at(South)));
+      break;
     default: throw std::logic_error("in branch, STOP");
   }
 }
