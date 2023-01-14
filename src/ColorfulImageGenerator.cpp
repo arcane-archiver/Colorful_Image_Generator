@@ -1,6 +1,11 @@
 #include "ColorfulImageGenerator.hpp"
 #include <stdexcept>
 
+using CanvasUtility::CardinalDirection::North;
+using CanvasUtility::CardinalDirection::South;
+using CanvasUtility::CardinalDirection::East;
+using CanvasUtility::CardinalDirection::West;
+
 cs225::PNG ColorfulImageGenerator::generate(unsigned width, unsigned height) {
   cs225::PNG image(width, height);
   drawGraph(image);
@@ -15,7 +20,7 @@ cs225::PNG ColorfulImageGenerator::generate(unsigned width, unsigned height, uns
 void ColorfulImageGenerator::drawGraph(cs225::PNG &image) {
   const unsigned MIDDLE_X = static_cast<unsigned>(image.width() / 2.0);
   const unsigned MIDDLE_Y = static_cast<unsigned>(image.height() / 2.0);
-  const CanvasUtility::Position position(CanvasUtility::CardinalDirection::North, MIDDLE_X, MIDDLE_Y);
+  const CanvasUtility::Position position(North, MIDDLE_X, MIDDLE_Y);
 
   CanvasUtility::drawSquare(image, NODE_MARKER, SQUARE_WIDTH, MIDDLE_X, MIDDLE_Y); // first node
   recursivelyDrawGraph(image, true, position);
@@ -47,10 +52,10 @@ void ColorfulImageGenerator::recursivelyDrawGraph(cs225::PNG &image, bool branch
 
     CanvasUtility::CardinalDirection pivotDirection = position.direction;
     switch(randomNumber) {
-      case 0: pivotDirection = CanvasUtility::CardinalDirection::North; break;
-      case 1: pivotDirection = CanvasUtility::CardinalDirection::South; break;
-      case 2: pivotDirection = CanvasUtility::CardinalDirection::East; break;
-      case 3: pivotDirection = CanvasUtility::CardinalDirection::West; break;
+      case 0: pivotDirection = North; break;
+      case 1: pivotDirection = South; break;
+      case 2: pivotDirection = East; break;
+      case 3: pivotDirection = West; break;
       default: throw std::logic_error("random number is not in [0, 3]");
     }
 
@@ -60,12 +65,6 @@ void ColorfulImageGenerator::recursivelyDrawGraph(cs225::PNG &image, bool branch
 }
 
 CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position const position) {
-  using CanvasUtility::CardinalDirection;
-  using CardinalDirection::North;
-  using CardinalDirection::South;
-  using CardinalDirection::East;
-  using CardinalDirection::West;
-
   unsigned x = position.x;
   unsigned y = position.y;
   for (unsigned i = 0; i < edgeLength; i++) {
@@ -74,11 +73,11 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsign
       case South: y -= 1; break;
       case East: x += 1; break;
       case West: x -= 1; break;
-      default: throw std::logic_error("attempted to draw edge with CanvasUtility::CardinalDirection::STOP");
+      default: throw std::logic_error("attempted to draw edge with null position");
     }
 
     if (!CanvasUtility::inBounds(png, x, y) || isNodePixel(png.getPixel(x, y)))
-      return CanvasUtility::Position(CardinalDirection::Null, x, y);
+      return CanvasUtility::Position(CanvasUtility::CardinalDirection::Null, x, y);
 
     switch(position.direction) {
       case North: case South:
@@ -90,7 +89,7 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsign
         CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(South, x, y));
         break;
       default:
-        throw std::logic_error("bad Direction d");
+        throw std::logic_error("bad Direction");
     }
 
     CanvasUtility::paintIfInBounds(png, EDGE_MARKER, x, y); // this is the "inside" of the drawn edge
@@ -99,42 +98,51 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsign
   return CanvasUtility::Position(position.direction, x, y);
 }
 
-void ColorfulImageGenerator::drawBranch(cs225::PNG &image, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y) {
-  auto position = CanvasUtility::Position(direction, x, y);
-  unsigned southY = y - static_cast<unsigned>(SQUARE_WIDTH / 2.0); 
-  unsigned northY = y + static_cast<unsigned>(SQUARE_WIDTH / 2.0);
-  unsigned eastX = x + static_cast<unsigned>(SQUARE_WIDTH / 2.0);
-  unsigned westX = x - static_cast<unsigned>(SQUARE_WIDTH / 2.0);
-  switch (direction) {
-    case CanvasUtility::CardinalDirection::North:
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::North, x, northY));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::East, eastX, y));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::West, westX, y));
-      recursivelyDrawGraph(image, false, position); break;
-    case CanvasUtility::CardinalDirection::South:
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::South, x, southY));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::East, eastX, y));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::West, westX, y));
-      recursivelyDrawGraph(image, false, position); break;
-    case CanvasUtility::CardinalDirection::East:
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::East, eastX, y));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::North, x, northY));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::South, x, southY));
-      recursivelyDrawGraph(image, false, position); break;
-    case CanvasUtility::CardinalDirection::West:
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::West, westX, y));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::North, x, northY));
-      recursivelyDrawGraph(image, false, position);
-      position = drawEdge(image, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(CanvasUtility::CardinalDirection::South, x, southY)); 
-      recursivelyDrawGraph(image, false, position); break;
-    case CanvasUtility::CardinalDirection::Null: throw std::logic_error("in branch, CanvasUtility::CardinalDirection::STOP");
+
+  // std::unordered_map<CanvasUtility::CardinalDirection, CanvasUtility::Position> getBranchPosition = {
+  //   {North, CanvasUtility::Position(North, x, northY)},
+  //   {South, CanvasUtility::Position(South, x, southY)},
+  //   {East, CanvasUtility::Position(East, eastX, y)},
+  //   {West, CanvasUtility::Position(West, westX, y)}
+  // };
+
+#include <unordered_map>
+void ColorfulImageGenerator::drawBranch(cs225::PNG & png, CanvasUtility::CardinalDirection d, unsigned int x, unsigned int y) {
+  auto pos = CanvasUtility::Position(d, x, y);
+  unsigned int northY = y + static_cast<unsigned>(SQUARE_WIDTH / 2.0);
+  unsigned int southY = y - static_cast<unsigned>(SQUARE_WIDTH / 2.0); 
+  unsigned int eastX = x + static_cast<unsigned>(SQUARE_WIDTH / 2.0);
+  unsigned int westX = x - static_cast<unsigned>(SQUARE_WIDTH / 2.0);
+  switch (d) {
+    case North:
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(North, x, northY));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(East, eastX, y));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(West, westX, y));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y)); break;
+    case South:
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(South, x, southY));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(East, eastX, y));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(West, westX, y));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y)); break;
+    case East:
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(East, eastX, y));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(North, x, northY));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(South, x, southY));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y)); break;
+    case West:
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(West, westX, y));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(North, x, northY));
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y));
+      pos = drawEdge(png, static_cast<unsigned>(EDGE_LENGTH), CanvasUtility::Position(South, x, southY)); 
+      recursivelyDrawGraph(png, false, CanvasUtility::Position(pos.direction, pos.x, pos.y)); break;
+    default: throw std::logic_error("in branch, STOP");
   }
 }
 

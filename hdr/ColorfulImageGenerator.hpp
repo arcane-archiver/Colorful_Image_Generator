@@ -12,7 +12,7 @@ namespace ColorfulImageGenerator {
 
   constexpr double NODE_LUMINANCE_MARKER = 0.0;
   const cs225::HSLAPixel NODE_MARKER(0.0, 1.0, NODE_LUMINANCE_MARKER);
-  constexpr double EDGE_LUMINANCE_MARKER = 0.1;
+  constexpr double EDGE_LUMINANCE_MARKER = 0.001;
   const cs225::HSLAPixel EDGE_MARKER(0.0, 1.0, EDGE_LUMINANCE_MARKER);
 
   cs225::PNG generate(unsigned width, unsigned height);
