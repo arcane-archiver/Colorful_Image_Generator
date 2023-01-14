@@ -60,33 +60,42 @@ void ColorfulImageGenerator::recursivelyDrawGraph(cs225::PNG &image, bool branch
 }
 
 CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position const position) {
+  using CanvasUtility::CardinalDirection;
+  using CardinalDirection::North;
+  using CardinalDirection::South;
+  using CardinalDirection::East;
+  using CardinalDirection::West;
+
   unsigned x = position.x;
   unsigned y = position.y;
   for (unsigned i = 0; i < edgeLength; i++) {
     switch (position.direction) {
-      case CanvasUtility::CardinalDirection::North: y += 1; break;
-      case CanvasUtility::CardinalDirection::South: y -= 1; break;
-      case CanvasUtility::CardinalDirection::East: x += 1; break;
-      case CanvasUtility::CardinalDirection::West: x -= 1; break;
-      case CanvasUtility::CardinalDirection::Null: throw std::logic_error("attempted to draw edge with CanvasUtility::CardinalDirection::STOP");
+      case North: y += 1; break;
+      case South: y -= 1; break;
+      case East: x += 1; break;
+      case West: x -= 1; break;
+      default: throw std::logic_error("attempted to draw edge with CanvasUtility::CardinalDirection::STOP");
     }
 
-    if (!CanvasUtility::inBounds(png, x, y) || isNodePixel(png.getPixel(x, y))) {
-      return CanvasUtility::Position(CanvasUtility::CardinalDirection::Null, x, y);
-    }
+    if (!CanvasUtility::inBounds(png, x, y) || isNodePixel(png.getPixel(x, y)))
+      return CanvasUtility::Position(CardinalDirection::Null, x, y);
 
-    if (position.direction == CanvasUtility::CardinalDirection::North || position.direction == CanvasUtility::CardinalDirection::South) {
-      CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::CardinalDirection::West, x, y);
-      CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::CardinalDirection::East, x, y);
-    } else if (position.direction == CanvasUtility::CardinalDirection::East || position.direction == CanvasUtility::CardinalDirection::West) {
-      CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::CardinalDirection::North, x, y);
-      CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::CardinalDirection::South, x, y);
-    } else {
-      throw std::logic_error("bad Direction d");
+    switch(position.direction) {
+      case North: case South:
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, West, x, y);
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, East, x, y);
+        break;
+      case East: case West:
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, North, x, y);
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, South, x, y);
+        break;
+      default:
+        throw std::logic_error("bad Direction d");
     }
 
     CanvasUtility::paintIfInBounds(png, EDGE_MARKER, x, y);
   }
+
   return CanvasUtility::Position(position.direction, x, y);
 }
 
