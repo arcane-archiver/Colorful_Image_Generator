@@ -27,15 +27,15 @@ void CanvasUtility::drawSquare(cs225::PNG &canvas, cs225::HSLAPixel const paint,
       paintIfInBounds(canvas, paint, x, y);
 }
 
-void CanvasUtility::drawLine(cs225::PNG &canvas, cs225::HSLAPixel paint, double lineLength, CardinalDirection direction, unsigned x, unsigned y) {
+void CanvasUtility::drawLine(cs225::PNG &canvas, cs225::HSLAPixel paint, double lineLength, Position position) {
   for (unsigned i = 0; i < lineLength; i++) {
-    switch (direction) {
-      case CardinalDirection::North: ++y; break;
-      case CardinalDirection::South: --y; break;
-      case CardinalDirection::East: ++x; break;
-      case CardinalDirection::West: --x; break;
+    switch (position.direction) {
+      case CardinalDirection::North: ++position.y; break;
+      case CardinalDirection::South: --position.y; break;
+      case CardinalDirection::East: ++position.x; break;
+      case CardinalDirection::West: --position.x; break;
       default: return;
     }
-    paintIfInBounds(canvas, paint, x, y);
+    paintIfInBounds(canvas, paint, position.x, position.y);
   }
 }

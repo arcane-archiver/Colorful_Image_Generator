@@ -25,7 +25,7 @@ namespace CanvasUtility {
     unsigned const middle_y
   );
 
-  void drawLine(cs225::PNG &canvas, cs225::HSLAPixel paint, double lineLength, CardinalDirection direction, unsigned x, unsigned y);
+  void drawLine(cs225::PNG &canvas, cs225::HSLAPixel paint, double lineLength, Position position);
 }
 
 #endif

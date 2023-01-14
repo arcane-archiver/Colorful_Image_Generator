@@ -82,18 +82,18 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsign
 
     switch(position.direction) {
       case North: case South:
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, West, x, y);
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, East, x, y);
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(West, x, y));
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(East, x, y));
         break;
       case East: case West:
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, North, x, y);
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, South, x, y);
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(North, x, y));
+        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(South, x, y));
         break;
       default:
         throw std::logic_error("bad Direction d");
     }
 
-    CanvasUtility::paintIfInBounds(png, EDGE_MARKER, x, y);
+    CanvasUtility::paintIfInBounds(png, EDGE_MARKER, x, y); // this is the "inside" of the drawn edge
   }
 
   return CanvasUtility::Position(position.direction, x, y);
