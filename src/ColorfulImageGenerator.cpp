@@ -19,7 +19,7 @@ ColorfulImageGenerator::ColorfulImageGenerator(unsigned width, unsigned height):
   recursionCount = 0;
 }
 
-cs225::PNG ColorfulImageGenerator::generate() {
+cs225::PNG ColorfulImageGenerator::generate() const {
   cs225::PNG image(WIDTH, HEIGHT);
 
   void(SQUARE_WIDTH+EDGE_LENGTH+LINE_LENGTH+NODE_COLOR+EDGE_COLOR+RECURSION_MAX);
@@ -27,6 +27,10 @@ cs225::PNG ColorfulImageGenerator::generate() {
   return image;
 }
 
-void ColorfulImageGenerator::drawGraph() {
+void ColorfulImageGenerator::drawGraph(cs225::PNG canvas) const {
+
+}
+
+void ColorfulImageGenerator::paintIfInBounds(cs225::PNG canvas, cs225::HSLAPixel const paint, unsigned const x, unsigned const y) const {
 
 }

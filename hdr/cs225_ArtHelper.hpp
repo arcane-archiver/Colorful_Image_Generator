@@ -23,7 +23,7 @@ class ArtHelper {
     double LINE_LENGTH;
     double NODE_COLOR;
     double EDGE_COLOR;
-    unsigned int RECURSION_COUNT;
+    unsigned int recursionCount;
     unsigned int RECURSION_MAX;
 
     ArtHelper() = delete;
@@ -42,11 +42,6 @@ class ArtHelper {
     void drawLine(cs225::PNG & png, double lineLength, Direction d, double x, double y);
 
     void drawSquare(cs225::PNG & png, Direction d, double x, double y);
-
-    Position drawNode(
-      cs225::PNG &png, cs225::HSLAPixel pixel, Direction d,
-      double radius, double h, double k
-    );
 
   public:
     void drawAura(cs225::PNG & png, unsigned int centerX, unsigned int centerY);

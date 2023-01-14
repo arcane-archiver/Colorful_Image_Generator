@@ -2,6 +2,7 @@
 #define COLORFUL_IMAGE_GENERATOR_HPP
 
 #include "../cs225/PNG.h"
+#include "../cs225/HSLAPixel.h"
 
 class ColorfulImageGenerator {
   private:
@@ -32,10 +33,12 @@ class ColorfulImageGenerator {
     ColorfulImageGenerator(unsigned width, unsigned height);
 
   public:
-    cs225::PNG generate();
+    cs225::PNG generate() const;
 
   private:
-    void drawGraph();
+    void drawGraph(cs225::PNG canvas) const;
+    void paintIfInBounds(cs225::PNG canvas, cs225::HSLAPixel const paint, unsigned const x, unsigned const y) const;
+    void drawSquare(cs225::PNG canvas);
 };
 
 #endif

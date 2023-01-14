@@ -25,7 +25,7 @@ ArtHelper::ArtHelper(unsigned int smallestLength):
     LINE_LENGTH *= SCALE;
   }
 
-  RECURSION_COUNT = 0;
+  recursionCount = 0;
   RECURSION_MAX = 50000; // 94162 is the tested max on EWS
 }
 
@@ -97,24 +97,6 @@ void ArtHelper::drawSquare(cs225::PNG & png, Direction const d, double const x_m
   for (unsigned x = start_x; x <= end_x; x++)
     for (unsigned y = start_y; y <= end_y; y++)
       paint(png, cs225::HSLAPixel(NODE_COLOR, 1.0, 0.5), x, y);
-}
-
-ArtHelper::Position ArtHelper::drawNode(
-  cs225::PNG & png, cs225::HSLAPixel pixel, Direction const d,
-  double radius, double const h, double const k
-) {
-  using std::sqrt;
-  using std::pow;
-  signed int y1 = k;
-  signed int y2 = k;
-  for (signed x = h - radius; x <= h + radius; x++) {
-    y1 = sqrt(pow(radius, 2) - pow(x - h, 2)) + k;
-    y2 = 0 - sqrt(pow(radius, 2) - pow(x - h, 2)) + k;
-    for (signed row = y1; row >= y2; row--) {
-      paint(png, pixel, x, row);
-    }
-  }
-  return Position(d, h, k);
 }
 
 void ArtHelper::drawAura(cs225::PNG & png, unsigned int centerX, unsigned int centerY) {
@@ -203,8 +185,8 @@ void ArtHelper::drawBranch(cs225::PNG & png, Direction d, unsigned int x, unsign
 }
 
 void ArtHelper::recursivelyDrawGraph(cs225::PNG & png, bool branching, Direction d, unsigned int x, unsigned int y) {
-  RECURSION_COUNT += 1;
-  if (RECURSION_COUNT >= RECURSION_MAX)
+  recursionCount += 1;
+  if (recursionCount >= RECURSION_MAX)
     return;
 
   unsigned int randomNumber = std::rand() % 10;
