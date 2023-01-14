@@ -3,6 +3,7 @@
 
 #include "../cs225/PNG.h"
 #include "../cs225/HSLAPixel.h"
+#include "CanvasUtility.hpp"
 
 class ColorfulImageGenerator {
   private:
@@ -21,8 +22,8 @@ class ColorfulImageGenerator {
     const double SQUARE_WIDTH;
     const double EDGE_LENGTH;
     const double LINE_LENGTH;
-    const double NODE_COLOR;
-    const double EDGE_COLOR;
+    const cs225::HSLAPixel NODE_PAINT;
+    const cs225::HSLAPixel EDGE_PAINT;
     const unsigned RECURSION_MAX;
 
   private:
@@ -36,9 +37,10 @@ class ColorfulImageGenerator {
     cs225::PNG generate() const;
 
   private:
-    void drawGraph(cs225::PNG canvas) const;
-    void paintIfInBounds(cs225::PNG canvas, cs225::HSLAPixel const paint, unsigned const x, unsigned const y) const;
-    void drawSquare(cs225::PNG canvas);
+    void drawGraph(cs225::PNG image) const;
+    void recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y) const;
+    CanvasUtility::Position drawEdge(cs225::PNG & png, unsigned int edgeLength, CanvasUtility::CardinalDirection d, unsigned int x, unsigned int y) const;
+    void drawBranch(cs225::PNG &image, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y) const;
 };
 
 #endif
