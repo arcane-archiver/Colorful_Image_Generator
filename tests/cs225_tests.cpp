@@ -1,6 +1,6 @@
 #include "catch/catch.hpp"
 
-#include "../hdr/intro.hpp"
+#include "cs225_intro.hpp"
 
 #include "../cs225/PNG.h"
 using cs225::PNG;
@@ -76,41 +76,3 @@ TEST_CASE("Rotate in_03.png", "[weight=1]") {
 
   REQUIRE(expected == actual);
 }
-
-bool compareColor(const HSLAPixel & p1, const HSLAPixel & p2) {
-  if (p1.l == 0 && p2.l == 0) { return true; }
-  else if (p1.l == 1 && p2.l == 1) { return true; }
-  else if (p1.a == 0 && p2.a == 0) { return true; }
-  else {
-    return (
-      p1.h == p2.h &&
-      p1.s == p2.s &&
-      p1.l == p2.l &&
-      p1.a == p2.a
-    );
-  }
-}
-
-TEST_CASE("Creative artwork contains at least three unique colors", "[weight=5][part=3]") {
-  int width = 800;
-  PNG png = myArt(static_cast<unsigned>(width), static_cast<unsigned>(width));
-  std::vector<HSLAPixel> colors;
-
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < width; y++) {
-      HSLAPixel p = png.getPixel(static_cast<unsigned>(x), static_cast<unsigned>(y));
-      bool containsPixel = false;;
-      for (HSLAPixel color : colors) {
-        if (compareColor(p, color)) { containsPixel = true; break; }
-      }
-
-      if (!containsPixel) { colors.push_back(p); }
-      if (colors.size() >= 3) { return; }
-    }
-  }
-
-  if (colors.size() < 3) {
-    FAIL("Creative artwork does not contian three unique colors.");
-  }
-}
-

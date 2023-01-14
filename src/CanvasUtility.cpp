@@ -13,13 +13,7 @@ void CanvasUtility::paintIfInBounds(cs225::PNG &canvas, cs225::HSLAPixel const p
     canvas.getPixel(x, y) = paint;
 }
 
-void CanvasUtility::drawSquare(
-  cs225::PNG &canvas,
-  cs225::HSLAPixel const paint,
-  double const squareWidth,
-  unsigned const middle_x,
-  unsigned const middle_y
-) {
+void CanvasUtility::drawSquare(cs225::PNG &canvas, cs225::HSLAPixel const paint, double const squareWidth, unsigned const middle_x, unsigned const middle_y) {
   // start corner of square
   const unsigned start_x = middle_x - static_cast<unsigned>(squareWidth / 2.0);
   const unsigned start_y = middle_y - static_cast<unsigned>(squareWidth / 2.0);

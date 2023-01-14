@@ -23,11 +23,11 @@ void rotate(std::string inputFile, std::string outputFile) {
 #include <stdexcept>
 #include <cmath>
 
-cs225::PNG myArt(unsigned int width, unsigned int height) {
+cs225::PNG myArt(unsigned int width, unsigned int height, unsigned seed) {
 
   cs225::PNG png(width, height);
 
-  std::srand(823784745); // set seed
+  std::srand(seed); // set seed
 
   ArtHelper help(std::min(png.width(), png.height()));
   

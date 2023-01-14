@@ -5,4 +5,4 @@
 #include <string>
 
 void rotate(std::string inputFile, std::string outputFile);
-cs225::PNG myArt(unsigned int width, unsigned int height);
+cs225::PNG myArt(unsigned int width, unsigned int height, unsigned seed);

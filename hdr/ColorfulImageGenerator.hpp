@@ -5,42 +5,27 @@
 #include "../cs225/HSLAPixel.h"
 #include "CanvasUtility.hpp"
 
-class ColorfulImageGenerator {
-  private:
-    enum PixelType { Node, Edge, Background };
+namespace ColorfulImageGenerator {
+  constexpr double SQUARE_WIDTH = 15;
+  constexpr double EDGE_LENGTH = 7;
+  constexpr double LINE_LENGTH = 1;
 
-  public:
-    static constexpr double ILLINI_ORANGE = 11.0;
-    static constexpr double ILLINI_BLUE = 216.0;
+  constexpr double NODE_LUMINANCE_MARKER = 0.0;
+  const cs225::HSLAPixel NODE_MARKER(0.0, 1.0, NODE_LUMINANCE_MARKER);
+  constexpr double EDGE_LUMINANCE_MARKER = 0.1;
+  const cs225::HSLAPixel EDGE_MARKER(0.0, 1.0, EDGE_LUMINANCE_MARKER);
 
-  private:
-    const unsigned WIDTH;
-    const unsigned HEIGHT;
+  cs225::PNG generate(unsigned width, unsigned height);
+  cs225::PNG generate(unsigned width, unsigned height, unsigned seed);
 
-  private:
-    const double SCALE;
-    const double SQUARE_WIDTH;
-    const double EDGE_LENGTH;
-    const double LINE_LENGTH;
-    const cs225::HSLAPixel NODE_PAINT;
-    const cs225::HSLAPixel EDGE_PAINT;
-    const unsigned RECURSION_MAX;
+  void drawGraph(cs225::PNG &image);
+  void recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y);
+  CanvasUtility::Position drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::CardinalDirection d, unsigned int x, unsigned int y);
+  void drawBranch(cs225::PNG &image, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y);
 
-  private:
-    unsigned recursionCount;
+  bool isNodePixel(cs225::HSLAPixel);
+  bool isEdgePixel(cs225::HSLAPixel);
 
-  public:
-    ColorfulImageGenerator() = delete;
-    ColorfulImageGenerator(unsigned width, unsigned height);
-
-  public:
-    cs225::PNG generate() const;
-
-  private:
-    void drawGraph(cs225::PNG image) const;
-    void recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y) const;
-    CanvasUtility::Position drawEdge(cs225::PNG & png, unsigned int edgeLength, CanvasUtility::CardinalDirection d, unsigned int x, unsigned int y) const;
-    void drawBranch(cs225::PNG &image, CanvasUtility::CardinalDirection direction, unsigned int x, unsigned int y) const;
 };
 
 #endif

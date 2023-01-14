@@ -11,12 +11,10 @@
 int main(int argc, char *argv[]) {
   const unsigned width = 500;
   const unsigned height = 500;
+  const unsigned seed = 823784745;
 
-  ColorfulImageGenerator(width, height)
-    .generate()
-    .writeToFile("art.png");
-
-  myArt(width, height).writeToFile("myArt.png");
+  ColorfulImageGenerator::generate(width, height, seed).writeToFile("art.png");
+  myArt(width, height, seed).writeToFile("myArt.png");
 
   return 0;
 }
