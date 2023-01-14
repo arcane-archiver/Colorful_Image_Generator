@@ -17,6 +17,6 @@ int main(int argc, char *argv[]) {
   } else {
     std::cout << "Need an integer argument." << std::endl;
   }
-  
+
   return 0;
 }
