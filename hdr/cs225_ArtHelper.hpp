@@ -2,19 +2,13 @@
 
 #include "../cs225/PNG.h"
 
-#ifndef ILLINI_ORANGE
-#define ILLINI_ORANGE 11.0
-#endif
-#ifndef ILLINI_BLUE
-#define ILLINI_BLUE 216.0
-#endif
-#ifndef NICE_COLOR
-#define NICE_COLOR 300.0
-#endif
-
 class ArtHelper {
   public:
-    enum Direction {N, S, E, W, STOP};
+    static constexpr double ILLINI_ORANGE = 11.0;
+    static constexpr double ILLINI_BLUE = 216.0;
+    static constexpr double NICE_COLOR = 300.0;
+
+    enum Direction {North, South, East, West, STOP};
     struct Position {
       Direction d;
       unsigned int x;
@@ -24,8 +18,6 @@ class ArtHelper {
 
     double SMALLEST_LENGTH;
     double SCALE;
-      double BOUNDARY_CORNER_MIN;
-      double BOUNDARY_CORNER_MAX;
     double SQUARE_WIDTH;
     double EDGE_LENGTH;
     double LINE_LENGTH;
@@ -37,43 +29,34 @@ class ArtHelper {
     ArtHelper() = delete;
     ArtHelper(unsigned int smallestLength);
 
-    void dump(cs225::PNG &png);
+    void drawGraph(cs225::PNG &png);
 
+  public:
+    void dumpBlackPaint(cs225::PNG &png);
+
+  private:
     bool inBounds(const cs225::PNG & png, const unsigned int x, const unsigned int y);
 
-    cs225::HSLAPixel & safePixel(cs225::PNG & png, const unsigned int x, const unsigned int y);
-
-    std::string ICON = "\\";
-    void iterateIcon();
     void paint(cs225::PNG & png, cs225::HSLAPixel pixel, unsigned int x, unsigned int y);
 
     void drawLine(cs225::PNG & png, double lineLength, Direction d, double x, double y);
 
-    Position drawSquare(cs225::PNG & png, Direction d, double x, double y);
-
-    Position drawCircle(
-      cs225::PNG &png, cs225::HSLAPixel pixel, Direction d,
-      double radius, double h, double k
-    );
+    void drawSquare(cs225::PNG & png, Direction d, double x, double y);
 
     Position drawNode(
       cs225::PNG &png, cs225::HSLAPixel pixel, Direction d,
       double radius, double h, double k
     );
 
-    void drawParabola(cs225::PNG & png, cs225::HSLAPixel pixel, double a, double k, double h);
-
-    void drawSmile(cs225::PNG & png, cs225::HSLAPixel pixel);
-
+  public:
     void drawAura(cs225::PNG & png, unsigned int centerX, unsigned int centerY);
 
+  private:
     Position drawEdge(cs225::PNG & png, unsigned int edgeLength, Direction d, unsigned int x, unsigned int y);
 
     void drawBranch(cs225::PNG & png, Direction d, unsigned int x, unsigned int y);
 
-    void recursivelyDraw(cs225::PNG & png, bool branching, Direction d, unsigned int x, unsigned int y);
-
-    cs225::PNG flip(cs225::PNG & png);
+    void recursivelyDrawGraph(cs225::PNG & png, bool branching, Direction d, unsigned int x, unsigned int y);
 
   private:
     void iterateColorIndex(double & i, double k);

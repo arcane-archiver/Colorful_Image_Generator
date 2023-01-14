@@ -9,20 +9,14 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-  // if (argc == 1+1) {
-  //   unsigned int width = (unsigned int)atoi(argv[1]);
-  //   std::cout << "Calling myArt(" << width << ", " << width << ") and saving it as `art.png`." << std::endl;
+  const unsigned width = 500;
+  const unsigned height = 500;
 
-  //   cs225::PNG png = myArt(width, width);
-  //   png.writeToFile("art.png");
-  // } else {
-  //   std::cout << "Need an integer argument." << std::endl;
-  // }
+  ColorfulImageGenerator(width, height)
+    .generate()
+    .writeToFile("art.png");
 
-  unsigned width = 500;
-  // cs225::PNG image = ColorfulImageGenerator::generateImage(width, width);
-  cs225::PNG image = myArt(width, width);
-  image.writeToFile("art.png");
+  myArt(width, height).writeToFile("myArt.png");
 
   return 0;
 }
