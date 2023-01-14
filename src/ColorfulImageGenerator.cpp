@@ -5,5 +5,5 @@ cs225::PNG ColorfulImageGenerator::generateImage(unsigned int width, unsigned in
 
 
 
-  return std::move(image);
+  return image;
 }
