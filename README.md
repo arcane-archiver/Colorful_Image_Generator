@@ -14,3 +14,13 @@ width=500
 Arguments on the console are of the form `key=value`.
 
 For example, `make main args="output=colorful.png"`.
+
+Windows
+```
+.\main.exe output=colorful.png
+```
+
+Linux
+```
+./main.out output=colorful.png
+```
