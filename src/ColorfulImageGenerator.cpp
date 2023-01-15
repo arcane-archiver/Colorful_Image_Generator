@@ -2,6 +2,15 @@
 #include <stdexcept>
 #include <unordered_map>
 
+#ifndef PRINT
+#if false
+#include <iostream>
+#define PRINT(x) do {std::cout << x << std::endl; } while (false)
+#else
+#define PRINT(x)
+#endif
+#endif
+
 using CanvasUtility::CardinalDirection::North;
 using CanvasUtility::CardinalDirection::South;
 using CanvasUtility::CardinalDirection::East;
@@ -18,6 +27,7 @@ cs225::PNG ColorfulImageGenerator::generate(unsigned width, unsigned height, uns
   return generate(width, height);
 }
 
+int count = 0;
 void ColorfulImageGenerator::drawGraph(cs225::PNG &image) {
   const unsigned MIDDLE_X = static_cast<unsigned>(image.width() / 2.0);
   const unsigned MIDDLE_Y = static_cast<unsigned>(image.height() / 2.0);
@@ -25,14 +35,21 @@ void ColorfulImageGenerator::drawGraph(cs225::PNG &image) {
   const CanvasUtility::Position MIDDLE_POSITION(North, MIDDLE_X, MIDDLE_Y);
 
   CanvasUtility::drawSquare(image, NODE_MARKER, SQUARE_WIDTH, MIDDLE_X, MIDDLE_Y); // first node
-  recursivelyDrawGraph(image, true, MIDDLE_POSITION);
-  return;
 
+  // recursivelyDrawGraph(image, true, MIDDLE_POSITION);
+  // return;
+
+  std::rand();
   std::stack<CanvasUtility::Position> work;
-  work.push(MIDDLE_POSITION);
+  drawBranch(image, MIDDLE_POSITION, work);
 
   while (!work.empty()) {
     CanvasUtility::Position position(work.top()); work.pop();
+
+    // base case
+    if (position.direction == CanvasUtility::CardinalDirection::Null || !CanvasUtility::inBounds(image, position.x, position.y))
+      continue;
+
     unsigned int randomNumber = std::rand() % 10;
 
     if (randomNumber < 2) {
@@ -50,6 +67,11 @@ void ColorfulImageGenerator::drawGraph(cs225::PNG &image) {
         edgeLength *= 9;
 
       auto randomDirection = static_cast<CanvasUtility::CardinalDirection>(std::rand() % 4);
+      PRINT(randomDirection<<"|"<<position.direction);
+      if (randomDirection == CanvasUtility::reverse(position.direction)) {
+        PRINT("reverse");
+        randomDirection = position.direction; // no going backwards
+      }
       CanvasUtility::Position pivotPosition = drawEdge(image, edgeLength, CanvasUtility::Position(randomDirection, position.x, position.y));
       work.push(pivotPosition);
     }
@@ -83,7 +105,8 @@ void ColorfulImageGenerator::recursivelyDrawGraph(cs225::PNG &image, bool branch
   }
 }
 
-CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position position) {
+CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &image, unsigned int edgeLength, CanvasUtility::Position position) {
+  PRINT("edge");
   for (unsigned i = 0; i < edgeLength; i++) {
     switch (position.direction) {
       case North: position.y += 1; break;
@@ -93,29 +116,34 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsign
       default: throw std::logic_error("attempted to draw edge with null position");
     }
 
-    if (!CanvasUtility::inBounds(png, position.x, position.y) || isNodePixel(png.getPixel(position.x, position.y)))
+    if (!CanvasUtility::inBounds(image, position.x, position.y) || isNodePixel(image.getPixel(position.x, position.y))) {
+      PRINT("\tdead");
       return CanvasUtility::Position(CanvasUtility::CardinalDirection::Null, position.x, position.y);
+    }
 
     switch(position.direction) {
       case North: case South:
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(West, position.x, position.y));
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(East, position.x, position.y));
+        CanvasUtility::drawLine(image, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(West, position.x, position.y));
+        CanvasUtility::drawLine(image, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(East, position.x, position.y));
         break;
       case East: case West:
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(North, position.x, position.y));
-        CanvasUtility::drawLine(png, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(South, position.x, position.y));
+        CanvasUtility::drawLine(image, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(North, position.x, position.y));
+        CanvasUtility::drawLine(image, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(South, position.x, position.y));
         break;
       default:
         throw std::logic_error("bad Direction");
     }
 
-    CanvasUtility::paintIfInBounds(png, EDGE_MARKER, position.x, position.y); // this is the "inside" of the drawn edge
+    CanvasUtility::paintIfInBounds(image, EDGE_MARKER, position.x, position.y); // this is the "inside" of the drawn edge
   }
 
+  PRINT("\t"<<position.direction<<" "<<position.x<<" "<<position.y);
+  // image.writeToFile(std::to_string(count++) + ".png");
   return position;
 }
 
 void ColorfulImageGenerator::drawBranch(cs225::PNG &png, CanvasUtility::Position const position, std::stack<CanvasUtility::Position> &work) {
+  PRINT("branch");
   unsigned const
     northY = position.y + static_cast<unsigned>(SQUARE_WIDTH / 2.0),
     southY = position.y - static_cast<unsigned>(SQUARE_WIDTH / 2.0),

@@ -39,3 +39,13 @@ void CanvasUtility::drawLine(cs225::PNG &canvas, cs225::HSLAPixel paint, double 
     paintIfInBounds(canvas, paint, position.x, position.y);
   }
 }
+
+CanvasUtility::CardinalDirection CanvasUtility::reverse(CardinalDirection direction) {
+  switch (direction) {
+    case North: return South;
+    case South: return North;
+    case East: return West;
+    case West: return East;
+    case Null: return Null;
+  }
+}

@@ -14,7 +14,8 @@ int main(int argc, char *argv[]) {
   const unsigned seed = 823784745;
 
   ColorfulImageGenerator::generate(width, height, seed).writeToFile("art.png");
-  myArt(width, height, seed).writeToFile("myArt.png");
+
+  // myArt(width, height, seed).writeToFile("myArt.png");
 
   return 0;
 }

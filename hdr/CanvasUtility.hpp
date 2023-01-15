@@ -26,6 +26,8 @@ namespace CanvasUtility {
   );
 
   void drawLine(cs225::PNG &canvas, cs225::HSLAPixel paint, double lineLength, Position position);
+
+  CardinalDirection reverse(CardinalDirection direction);
 }
 
 #endif
