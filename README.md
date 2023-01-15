@@ -1,6 +1,8 @@
 # Colorful_Image_Generator
 Generates PNG files with a colorful interconnected pattern.
 
+(For Linux.)
+
 Default parameters:
 ```
 output=art.png
@@ -9,7 +11,6 @@ seed=1
 width=500
 ```
 
-Arguments on the console are of the form "key"="value".
+Arguments on the console are of the form `key=value`.
 
-For example:
-`make main args="output=colorful.png"`
+For example, `make main args="output=colorful.png"`.
