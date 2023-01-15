@@ -7,6 +7,18 @@
 #include <stack>
 
 namespace ColorfulImageGenerator {
+  class ColorWheel {
+    private:
+      double _color;
+    public:
+      ColorWheel() = delete;
+      ColorWheel(double color);
+    public:
+      double getColor() const;
+      void setColor(double const color);
+      void addColor(double offset);
+  };
+
   constexpr double SQUARE_WIDTH = 15;
   constexpr double EDGE_LENGTH = 7;
   constexpr double LINE_LENGTH = 1;
@@ -20,14 +32,13 @@ namespace ColorfulImageGenerator {
   cs225::PNG generate(unsigned width, unsigned height, unsigned seed);
 
   void drawGraph(cs225::PNG &image);
-  void recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::Position const position);
   CanvasUtility::Position drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position position);
   void drawBranch(cs225::PNG &png, CanvasUtility::Position const position, std::stack<CanvasUtility::Position> &work);
-  void recursivelyDrawBranch(cs225::PNG &image, CanvasUtility::Position position);
 
   bool isNodePixel(cs225::HSLAPixel);
   bool isEdgePixel(cs225::HSLAPixel);
 
+  void drawAura(cs225::PNG &png, unsigned centerX, unsigned centerY);
 };
 
 #endif

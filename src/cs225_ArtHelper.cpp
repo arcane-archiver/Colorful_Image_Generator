@@ -99,7 +99,7 @@ void ArtHelper::drawSquare(cs225::PNG & png, Direction const d, double const x_m
       paint(png, cs225::HSLAPixel(NODE_COLOR, 1.0, 0.5), x, y);
 }
 
-void ArtHelper::drawAura(cs225::PNG & png, unsigned int centerX, unsigned int centerY) {
+void ArtHelper::drawAura(cs225::PNG &png, unsigned int centerX, unsigned int centerY) {
   double colorIndex = 0.0;
   double unitOfColor = 360.0 / (double)SMALLEST_LENGTH;
 
