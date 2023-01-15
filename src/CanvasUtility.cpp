@@ -5,7 +5,7 @@ CanvasUtility::Position::Position(CardinalDirection setDirection, unsigned int s
 { }
 
 bool CanvasUtility::inBounds(cs225::PNG const &canvas, const unsigned int x, const unsigned int y) {
-  return (0 <= x && x < canvas.width()) && (0 <= y && y < canvas.height());
+  return x < canvas.width() && y < canvas.height();
 }
 
 void CanvasUtility::paintIfInBounds(cs225::PNG &canvas, cs225::HSLAPixel const paint, unsigned const x, unsigned const y) {
@@ -46,6 +46,6 @@ CanvasUtility::CardinalDirection CanvasUtility::reverse(CardinalDirection direct
     case South: return North;
     case East: return West;
     case West: return East;
-    case Null: return Null;
+    default: return Null;
   }
 }

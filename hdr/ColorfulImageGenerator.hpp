@@ -39,6 +39,6 @@ namespace ColorfulImageGenerator {
   bool isEdgePixel(cs225::HSLAPixel);
 
   void drawAura(cs225::PNG &png, unsigned centerX, unsigned centerY);
-};
+}
 
 #endif

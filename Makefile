@@ -10,9 +10,9 @@ linker = ${compiler}
 
 Depfile_Flags = -MMD -MP
 Warnings = -pedantic -Wall -Werror -Wfatal-errors -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wconversion
-Compiler_Flags = -std=c++20 -O0 ${Warnings} ${Depfile_Flags} -g -c -I hdr/
+Compiler_Flags = -std=c++2a -O0 ${Warnings} ${Depfile_Flags} -g -c -I hdr/ --static
 Static_Libs = $(patsubst lib/lib%.a,-l%,$(wildcard lib/*.a))
-Linker_Flags = -std=c++20 -Llib/
+Linker_Flags = -std=c++2a -Llib/ --static
 
 Objects = $(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp)) $(patsubst cs225/%.cpp,build/%.o,$(wildcard cs225/*.cpp)) build/lodepng.o
 Objects_for_Testing = $(filter-out build/main.o,${Objects}) build/catchmain.o $(patsubst tests/%.cpp,build/%.o,$(wildcard tests/*.cpp))

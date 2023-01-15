@@ -24,7 +24,7 @@ cs225::PNG ColorfulImageGenerator::generate(unsigned width, unsigned height) {
     {image.width() - 1, 0}
   };
 
-  std::shuffle(std::begin(auraOrigins), std::end(auraOrigins), std::default_random_engine(static_cast<uint>(std::rand())));
+  std::shuffle(std::begin(auraOrigins), std::end(auraOrigins), std::default_random_engine(static_cast<unsigned>(std::rand())));
   size_t const index = 0;
   drawAura(image, auraOrigins.at(index).first, auraOrigins.at(index).second);
   drawAura(image, auraOrigins.at(index + 1).first, auraOrigins.at(index + 1).second);

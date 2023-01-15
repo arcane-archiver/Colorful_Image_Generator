@@ -33,9 +33,9 @@ int main(int argc, char *argv[]) {
 
 
   try {
-    uint const width = static_cast<uint>(std::atoi(parameters.at("width").c_str()));
-    uint const height = static_cast<uint>(std::atoi(parameters.at("height").c_str()));
-    uint const seed = static_cast<uint>(std::atoi(parameters.at("seed").c_str()));
+    unsigned const width = static_cast<unsigned>(std::atoi(parameters.at("width").c_str()));
+    unsigned const height = static_cast<unsigned>(std::atoi(parameters.at("height").c_str()));
+    unsigned const seed = static_cast<unsigned>(std::atoi(parameters.at("seed").c_str()));
     ColorfulImageGenerator::generate(width, height, seed).writeToFile(parameters["output"]);
   } catch (...) {
     std::cout << "error" << std::endl;
