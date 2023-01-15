@@ -5,7 +5,7 @@
 #include "../cs225/HSLAPixel.h"
 
 namespace CanvasUtility {
-  enum CardinalDirection { North, South, East, West, Null };
+  enum CardinalDirection : unsigned { North=0, South=1, East=2, West=3, Null };
 
   struct Position {
     CardinalDirection direction;
