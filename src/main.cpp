@@ -7,29 +7,43 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <unordered_map>
 
 int main(int argc, char *argv[]) {
-  uint const width = 500;
-  uint const height = 500;
+  std::unordered_map<std::string, std::string> parameters = {
+    {"width", "500"},
+    {"height", "500"},
+    {"seed", "1"},
+    {"output", "art.png"}
+  };
 
-  uint seed = 1;
-  try {
-    seed = static_cast<uint>(std::stoi(argv[0+1]));
-  } catch (...) {
-    std::cout << "invalid seed" << std::endl;
-    return 1;
+  for (int index = 1; index < argc; ++index) {
+    std::string arg(argv[index]);
+
+    size_t delimiterIndex = arg.find("=");
+    if (delimiterIndex == string::npos)
+      continue;
+
+    std::string key(arg.substr(0, delimiterIndex));
+    std::string value(arg.substr(delimiterIndex + 1));
+
+    if (parameters.contains(key))
+      parameters[key] = value;
   }
 
-  auto name = "art.png";
 
   try {
-    ColorfulImageGenerator::generate(width, height, seed).writeToFile(name);
+    uint const width = static_cast<uint>(std::atoi(parameters.at("width").c_str()));
+    uint const height = static_cast<uint>(std::atoi(parameters.at("height").c_str()));
+    uint const seed = static_cast<uint>(std::atoi(parameters.at("seed").c_str()));
+    ColorfulImageGenerator::generate(width, height, seed).writeToFile(parameters["output"]);
   } catch (...) {
     std::cout << "error" << std::endl;
     return 1;
   }
 
-  std::cout << "saved " << name << std::endl;
+  for (auto pair : parameters)
+    std::cout << pair.first << "=" << pair.second << std::endl;
 
   return 0;
 }
