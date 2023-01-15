@@ -17,10 +17,10 @@ For example, `make main args="output=colorful.png"`.
 
 Windows
 ```
-.\main.exe output=colorful.png
+.\colorful_art_generator.exe output=colorful.png
 ```
 
 Linux
 ```
-./main.out output=colorful.png
+./colorful_art_generator.out output=colorful.png
 ```
