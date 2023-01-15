@@ -20,7 +20,7 @@ namespace ColorfulImageGenerator {
 
   void drawGraph(cs225::PNG &image);
   void recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::Position const position);
-  CanvasUtility::Position drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position const position);
+  CanvasUtility::Position drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position position);
   void drawBranch(cs225::PNG &image, CanvasUtility::Position position);
 
   bool isNodePixel(cs225::HSLAPixel);
