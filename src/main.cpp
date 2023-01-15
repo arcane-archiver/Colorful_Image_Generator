@@ -1,21 +1,35 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "cs225_intro.hpp"
 #include "../cs225/PNG.h"
 #include "ColorfulImageGenerator.hpp"
 
 #include <iostream>
 #include <stdlib.h>
+#include <string>
 
 int main(int argc, char *argv[]) {
-  const unsigned width = 500;
-  const unsigned height = 500;
-  const unsigned seed = 823784745;
+  uint const width = 500;
+  uint const height = 500;
 
-  ColorfulImageGenerator::generate(width, height, seed).writeToFile("art.png");
+  uint seed = 1;
+  try {
+    seed = static_cast<uint>(std::stoi(argv[0+1]));
+  } catch (...) {
+    std::cout << "invalid seed" << std::endl;
+    return 1;
+  }
 
-  // myArt(width, height, seed).writeToFile("myArt.png");
+  auto name = "art.png";
+
+  try {
+    ColorfulImageGenerator::generate(width, height, seed).writeToFile(name);
+  } catch (...) {
+    std::cout << "error" << std::endl;
+    return 1;
+  }
+
+  std::cout << "saved " << name << std::endl;
 
   return 0;
 }

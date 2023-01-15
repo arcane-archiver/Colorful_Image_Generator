@@ -1,5 +1,4 @@
 #include "ColorfulImageGenerator.hpp"
-#include <stdexcept>
 #include <unordered_map>
 #include <cmath>
 #include <vector>
@@ -84,13 +83,15 @@ void ColorfulImageGenerator::drawGraph(cs225::PNG &image) {
 }
 
 CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &image, unsigned int edgeLength, CanvasUtility::Position position) {
+  static auto const invalid_direction_error = std::logic_error("invalid direction on draw edge");
+
   for (unsigned i = 0; i < edgeLength; i++) {
     switch (position.direction) {
       case North: position.y += 1; break;
       case South: position.y -= 1; break;
       case East: position.x += 1; break;
       case West: position.x -= 1; break;
-      default: throw std::logic_error("attempted to draw edge with null position");
+      default: throw invalid_direction_error;
     }
 
     if (!CanvasUtility::inBounds(image, position.x, position.y) || isNodePixel(image.getPixel(position.x, position.y)))
@@ -106,7 +107,7 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &image, unsi
         CanvasUtility::drawLine(image, EDGE_MARKER, LINE_LENGTH, CanvasUtility::Position(South, position.x, position.y));
         break;
       default:
-        throw std::logic_error("bad Direction");
+        throw invalid_direction_error;
     }
 
     CanvasUtility::paintIfInBounds(image, EDGE_MARKER, position.x, position.y); // this is the "inside" of the drawn edge
