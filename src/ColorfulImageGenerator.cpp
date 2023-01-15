@@ -29,16 +29,14 @@ void ColorfulImageGenerator::drawGraph(cs225::PNG &image) {
 
 void ColorfulImageGenerator::recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::Position const position) {
   unsigned int randomNumber = std::rand() % 10;
-  auto const x = position.x;
-  auto const y = position.y;
 
-  if (position.direction == CanvasUtility::CardinalDirection::Null || !CanvasUtility::inBounds(image, x, y))
+  if (position.direction == CanvasUtility::CardinalDirection::Null || !CanvasUtility::inBounds(image, position.x, position.y))
     return;
 
   if (branching == true) {
-    drawBranch(image, position.direction, x, y);
+    drawBranch(image, position);
   } else if (randomNumber < 2) {
-    CanvasUtility::drawSquare(image, NODE_MARKER, SQUARE_WIDTH, x, y);
+    CanvasUtility::drawSquare(image, NODE_MARKER, SQUARE_WIDTH, position.x, position.y);
     recursivelyDrawGraph(image, true, position);
   } else {
     randomNumber = std::rand() % 10;
@@ -99,23 +97,23 @@ CanvasUtility::Position ColorfulImageGenerator::drawEdge(cs225::PNG &png, unsign
   return CanvasUtility::Position(position.direction, x, y);
 }
 
-void ColorfulImageGenerator::drawBranch(cs225::PNG &png, CanvasUtility::CardinalDirection const direction, unsigned int const x, unsigned int const y) {
+void ColorfulImageGenerator::drawBranch(cs225::PNG &png, CanvasUtility::Position const position) {
   unsigned const
-    northY = y + static_cast<unsigned>(SQUARE_WIDTH / 2.0),
-    southY = y - static_cast<unsigned>(SQUARE_WIDTH / 2.0), 
-    eastX = x + static_cast<unsigned>(SQUARE_WIDTH / 2.0),
-    westX = x - static_cast<unsigned>(SQUARE_WIDTH / 2.0);
+    northY = position.y + static_cast<unsigned>(SQUARE_WIDTH / 2.0),
+    southY = position.y - static_cast<unsigned>(SQUARE_WIDTH / 2.0), 
+    eastX = position.x + static_cast<unsigned>(SQUARE_WIDTH / 2.0),
+    westX = position.x - static_cast<unsigned>(SQUARE_WIDTH / 2.0);
 
   std::unordered_map<CanvasUtility::CardinalDirection, CanvasUtility::Position> const getBranchPosition = {
-    {North, CanvasUtility::Position(North, x, northY)},
-    {South, CanvasUtility::Position(South, x, southY)},
-    {East, CanvasUtility::Position(East, eastX, y)},
-    {West, CanvasUtility::Position(West, westX, y)}
+    {North, CanvasUtility::Position(North, position.x, northY)},
+    {South, CanvasUtility::Position(South, position.x, southY)},
+    {East, CanvasUtility::Position(East, eastX, position.y)},
+    {West, CanvasUtility::Position(West, westX, position.y)}
   };
 
-  unsigned wheelIndex = direction;
+  unsigned wheelIndex = position.direction;
   unsigned ignoreIndex;
-  switch (direction) {
+  switch (position.direction) {
     case North: ignoreIndex = South; break;
     case South: ignoreIndex = North; break;
     case East: ignoreIndex = West; break;
