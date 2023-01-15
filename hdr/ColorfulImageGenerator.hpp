@@ -4,6 +4,7 @@
 #include "../cs225/PNG.h"
 #include "../cs225/HSLAPixel.h"
 #include "CanvasUtility.hpp"
+#include <stack>
 
 namespace ColorfulImageGenerator {
   constexpr double SQUARE_WIDTH = 15;
@@ -21,7 +22,8 @@ namespace ColorfulImageGenerator {
   void drawGraph(cs225::PNG &image);
   void recursivelyDrawGraph(cs225::PNG &image, bool branching, CanvasUtility::Position const position);
   CanvasUtility::Position drawEdge(cs225::PNG &png, unsigned int edgeLength, CanvasUtility::Position position);
-  void drawBranch(cs225::PNG &image, CanvasUtility::Position position);
+  void drawBranch(cs225::PNG &png, CanvasUtility::Position const position, std::stack<CanvasUtility::Position> &work);
+  void recursivelyDrawBranch(cs225::PNG &image, CanvasUtility::Position position);
 
   bool isNodePixel(cs225::HSLAPixel);
   bool isEdgePixel(cs225::HSLAPixel);
