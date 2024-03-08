@@ -7,8 +7,8 @@ COMPILER := clang++
 COMPILER_FLAG_LIST := -std=c++17 $(shell sdl2-config --cflags) ${WARNING_FLAG_LIST}
 LINKER_FLAG_LIST := $(shell sdl2-config --libs)
 
-SOURCE_LIST := $(patsubst source/%.cpp,build/%.o,$(wildcard source/*.cpp))
-OBJECT_LIST := $(SOURCE_LIST:.cpp=.o)
+SOURCE_LIST := $(wildcard source/*.cpp)
+OBJECT_LIST := $(patsubst source/%.cpp,build/%.o,${SOURCE_LIST})
 
 run/colorful: ${OBJECT_LIST}
 	${COMPILER} $^ -o $@ ${LINKER_FLAG_LIST}
